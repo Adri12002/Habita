@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Habita – Trouvez votre meilleure vie, plus proche</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Découvrez l'équilibre parfait entre travail de rêve et lieu de vie idéal">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-blur-circle"></div>
+  <div class="bg-blur-circle secondary"></div>
+
+  <nav class="main-nav">
+    <a href="index.html" class="nav-logo">
+      <img src="Logo.png" alt="Logo Habita" class="logo-image">
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Accueil</a>
+      <a href="profil.html">Profil</a>
+      <a href="map.html">Explorer</a>
+    </div>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+      <button id="theme-toggle" class="nav-cta">
+        <i id="theme-icon" class="fas fa-moon"></i>
+      </button>
+  </nav>
+
+  <div class="page-container">
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="logo-watermark">
+        <img src="Logo.png" alt="Filigrane Habita">
+      </div>
+      <h1><span class="highlight">Trouvez</span> votre meilleure vie, <span class="highlight">plus proche</span></h1>
+      <p class="tagline">La façon intelligente d'équilibrer opportunités professionnelles et cadre de vie</p>
+      <div class="hero-cta">
+        <a href="profil.html" class="cta-button pulse">
+          <span>Commencer l'exploration</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <div class="map-preview">
+        <div class="map-overlay"></div>
+        <div class="floating-elements">
+          <div class="floating-icon home">
+            <i class="fas fa-home"></i>
+          </div>
+          <div class="floating-icon job">
+            <i class="fas fa-briefcase"></i>
+          </div>
+          <div class="floating-icon route">
+            <i class="fas fa-route"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="value-section">
+    <div class="value-container">
+      <div class="value-card">
+        <div class="value-icon">
+          <i class="fas fa-chess-queen"></i>
+        </div>
+        <h3>Correspondance intelligente</h3>
+        <p>Notre algorithme trouve les logements et emplois adaptés à vos préférences de vie</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Optimisation des trajets</h3>
+        <p>Gérez votre temps de transport en fonction de votre rythme quotidien idéal</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <h3>Qualité de vie</h3>
+        <p>Nous priorisons les quartiers correspondant à votre définition du "mieux vivre"</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section">
+    <h2>Comment fonctionne Habita</h2>
+    <div class="steps-container">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Définissez vos préférences</h3>
+          <p>Précisez votre temps de trajet, mode de transport et priorités de vie</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Générez votre zone</h3>
+          <p>Nous calculons instantanément la zone géographique optimale selon vos critères</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Explorez les possibilités</h3>
+          <p>Découvrez des logements et offres d'emploi dans votre périmètre idéal</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials-section">
+    <h2>Expériences transformées</h2>
+    <div class="testimonials-container">
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          <p>"Habita m'a permis de trouver un appartement à 5 minutes de mon nouveau travail de rêve. J'ai gagné 2 heures de temps libre chaque jour !"</p>
+        </div>
+        <div class="testimonial-author">
+          <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sarah J.">
+          <div>
+            <h4>Sarah J.</h4>
+            <p>Paris, France</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-content">
+          <p>"J'ai pu négocier un meilleur salaire en montrant que je pouvais habiter près du bureau. Un vrai changement !"</p>
+        </div>
+        <div class="testimonial-author">
+          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Thomas L.">
+          <div>
+            <h4>Thomas L.</h4>
+            <p>Lyon, France</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <h2>Prêt à trouver votre équilibre idéal ?</h2>
+    <a href="map.html" class="cta-button secondary">
+      <span>Lancer la cartographie</span>
+      <i class="fas fa-map-marked-alt"></i>
+    </a>
+  </section>
+
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <img src="Logo-dark.png" alt="Logo Habita" class="footer-logo">
+        <p>Rendre la vie urbaine plus simple et équilibrée</p>
+      </div>
+
+      <div class="link-group">
+        <h4>Liens rapides</h4>
+        <a href="/">Accueil</a>
+        <a href="/map.html">Carte</a>
+        <a href="#">À propos</a>
+      </div>
+
+      <div class="link-group">
+        <h4>Assistance</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Contact</a>
+        <a href="#">Centre d'aide</a>
+      </div>
+
+      <div class="link-group">
+        <h4>Suivez-nous</h4>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+      document.querySelector('.nav-links').classList.toggle('active');
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.step, .value-card, .testimonial-card').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+  <script src="theme.js"></script>
+</body>
+</html>

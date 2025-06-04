@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Profil - Habita</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .profil-page {
+      padding-top: 100px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .profil-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .profil-form {
+      background: white;
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .profil-form .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profil-form label {
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .profil-form input,
+    .profil-form select {
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--light-gray);
+    }
+
+    .transport-choice {
+      display: flex;
+      gap: 10px;
+    }
+
+    .transport-choice button {
+      flex: 1;
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--light-gray);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .transport-choice button.active {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .profil-submit {
+      align-self: center;
+      padding: 15px 30px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .profil-submit:hover {
+      background: var(--primary-dark);
+    }
+  </style>
+</head>
+<body>
+  <nav class="main-nav">
+    <a href="index.html" class="nav-logo">
+      <img src="Logo.png" alt="Logo Habita" class="logo-image">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="#" class="active">Mon Profil</a>
+    </div>
+  </nav>
+
+  <main class="profil-page">
+    <div class="profil-header">
+      <h1>Parlez-nous de vous</h1>
+      <p>Nous utiliserons vos réponses pour personnaliser votre carte Habita</p>
+    </div>
+
+    <form class="profil-form" id="profilForm">
+      <div class="form-group">
+        <label for="address">Votre adresse de référence</label>
+        <input type="text" id="address" placeholder="Ex: 10 rue de Paris, Lyon">
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Temps de trajet idéal (minutes)</label>
+        <input type="number" id="duration" min="5" max="60" value="15">
+      </div>
+
+      <div class="form-group">
+        <label>Mode de transport préféré</label>
+        <div class="transport-choice">
+          <button type="button" data-mode="driving" class="active"><i class="fas fa-car"></i> Voiture</button>
+          <button type="button" data-mode="walking"><i class="fas fa-walking"></i> Marche</button>
+          <button type="button" data-mode="cycling"><i class="fas fa-bicycle"></i> Vélo</button>
+          <button type="button" data-mode="transit"><i class="fas fa-bus"></i> Transport</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="job">Type d'emploi recherché (optionnel)</label>
+        <input type="text" id="job" placeholder="Ex: Développeur Web, Infirmière...">
+      </div>
+
+      <div class="form-group">
+        <label for="departement">Département de recherche</label>
+        <input type="text" id="departement" placeholder="Ex: 75 pour Paris, 33 pour Bordeaux">
+      </div>
+
+      <div class="form-group">
+        <label for="focus">Qu'est-ce qui est le plus important pour vous ?</label>
+        <select id="focus">
+          <option value="balance">Équilibre trajet / vie</option>
+          <option value="salary">Salaire</option>
+          <option value="housing">Proximité du logement</option>
+          <option value="neighborhood">Quartier / ambiance</option>
+        </select>
+      </div>
+
+      <button type="submit" class="profil-submit">Afficher ma zone idéale</button>
+    </form>
+  </main>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const transportButtons = document.querySelectorAll('.transport-choice button');
+  let selectedMode = 'driving';
+
+  transportButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      transportButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMode = btn.dataset.mode;
+    });
+  });
+
+  document.getElementById('profilForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const profile = {
+      address: document.getElementById('address').value.trim(),
+      duration: parseInt(document.getElementById('duration').value),
+      transport: selectedMode,
+      job: document.getElementById('job').value.trim(),
+      departement: document.getElementById('departement').value.trim(),
+      focus: document.getElementById('focus').value
+    };
+
+    localStorage.setItem('habita-profile', JSON.stringify(profile));
+    window.location.href = 'map.html';
+  });
+});
+
+    const transportButtons = document.querySelectorAll('.transport-choice button');
+    let selectedMode = 'driving';
+
+    transportButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        transportButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedMode = btn.dataset.mode;
+      });
+    });
+
+    document.getElementById('profilForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const profile = {
+        address: document.getElementById('address').value,
+        duration: parseInt(document.getElementById('duration').value),
+        transport: selectedMode,
+        job: document.getElementById('job').value,
+        departement: document.getElementById('departement').value,
+        focus: document.getElementById('focus').value
+      };
+
+      localStorage.setItem('habita-profile', JSON.stringify(profile));
+      window.location.href = 'map.html';
+    });
+  </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const transportButtons = document.querySelectorAll('.transport-choice button');
+  let selectedMode = 'driving';
+
+  transportButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      transportButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedMode = btn.dataset.mode;
+    });
+  });
+
+  document.getElementById('profilForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const profile = {
+      address: document.getElementById('address').value.trim(),
+      duration: parseInt(document.getElementById('duration').value),
+      transport: selectedMode,
+      job: document.getElementById('job').value.trim(),
+      departement: document.getElementById('departement').value.trim(),
+      focus: document.getElementById('focus')?.value || "jobs"
+    };
+
+    localStorage.setItem('habita-profile', JSON.stringify(profile));
+    window.location.href = 'map.html';
+  });
+});
+</script>
+
+</body>
+</html>

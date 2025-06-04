@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Explorateur de Zone - Trouver Emplois & Logements</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js" defer></script>
+  <script src="https://unpkg.com/@turf/turf@6/turf.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="theme.js" defer></script>
+  <script src="https://unpkg.com/leaflet-easyprint" defer></script>
+  <script src="https://rawgit.com/rowanwins/leaflet-easyPrint/gh-pages/dist/bundle.js" defer></script>
+</head>
+<body class="map-page">
+  <nav class="main-nav">
+    <a href="index.html" class="nav-logo">
+      <img src="Logo.png" alt="Logo Habita" class="logo-image">
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="profil.html">Profil</a>
+      <a href="map.html" class="active">Explorer</a>
+      <div class="share-button-container">
+        <button id="share-map-btn" class="share-map-btn">Partager la carte</button>
+      </div>
+    </div>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <button id="theme-toggle" class="nav-cta">
+      <i id="theme-icon" class="fas fa-moon"></i>
+    </button>
+  </nav>
+
+
+    <div class="search-bar" id="search-bar">
+      <div class="search-bar-group">
+        <input type="text" id="address-search" placeholder="Entrez votre adresse..." autocomplete="off">
+        <div id="search-helper" class="search-helper"></div>
+        
+        <div class="transport-options">
+          <button class="transport-btn active" data-mode="driving" title="Voiture">
+            <i class="fas fa-car"></i>
+          </button>
+          <button class="transport-btn" data-mode="walking" title="Marche">
+            <i class="fas fa-walking"></i>
+          </button>
+          <button class="transport-btn" data-mode="cycling" title="Vélo">
+            <i class="fas fa-bicycle"></i>
+          </button>
+          <button class="transport-btn" data-mode="transit" title="Transport">
+            <i class="fas fa-bus"></i>
+          </button>
+        </div>
+        <input type="hidden" id="transport-mode" value="driving">
+        
+        <div class="time-input-group">
+          <label>Temps (min):</label>
+          <input type="range" id="duration-iso1" min="5" max="60" value="15" step="5" class="modern-slider duration-15">
+          <input type="number" id="duration-input-iso1" min="5" max="60" value="15" step="5" class="modern-input" readonly>
+        </div>
+      </div>
+      
+      <button id="generate-btn" class="primary-btn">
+        <span id="generate-text">Générer la zone</span>
+        <span id="generate-spinner" class="loading-spinner"></span>
+      </button>
+    </div>
+
+
+
+<div class="tab-content" id="saved-tab">
+<div class="saved-maps-container">
+  <select id="saved-maps" class="modern-select">
+    <option value="">Sélectionnez une zone sauvegardée...</option>
+  </select>
+  <div class="saved-actions">
+    <button id="load-btn" class="secondary-btn">
+      <i class="fas fa-map"></i> Charger
+    </button>
+    <button id="delete-btn" class="danger-btn">
+      <i class="fas fa-trash"></i> Supprimer
+    </button>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+    
+
+<div class="left-panel controls" id="left-panel">
+
+  <div class="display-options">
+    <button id="display-both" class="display-btn active" title="Les deux">
+      <i class="fas fa-layer-group"></i>
+    </button>
+    <button id="display-jobs" class="display-btn" title="Emplois">
+      <i class="fas fa-briefcase"></i>
+    </button>
+    <button id="display-housing" class="display-btn" title="Logements">
+      <i class="fas fa-home"></i>
+    </button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="advanced-options">
+      <i class="fas fa-cog"></i> Options
+    </button>
+    <button class="tab-btn" data-tab="housing-results">
+      <i class="fas fa-home"></i> Logements
+    </button>
+    <button class="tab-btn" data-tab="jobs-results">
+      <i class="fas fa-briefcase"></i> Emplois
+    </button>
+  </div>
+
+  <div class="tab-content-container">
+    <!-- Onglet Options Avancées -->
+    <div class="tab-content active" id="advanced-options">
+      <div class="panel-section">
+        <h3><i class="fas fa-map-marked-alt"></i> Options de la carte</h3>
+        <!-- Tous vos éléments existants pour les options de carte -->
+        <button id="toggle-tiers-btn" class="secondary-btn">Afficher les niveaux détaillés</button>
+        <button id="add-second-point-btn" class="secondary-btn">Ajouter une deuxième adresse</button>
+        
+        <div id="second-location-settings">
+          <h3>Paramètres de la deuxième adresse</h3>
+          <div class="address-input">
+            <input type="text" id="address-search-2" placeholder="Entrez votre deuxième adresse..." autocomplete="off">
+            <div id="search-helper-2" class="search-helper"></div>
+          </div>
+
+          <div class="time-input-group">
+            <label>Temps de trajet (minutes) :</label>
+            <input type="range" id="duration-iso2" min="5" max="60" value="15" step="5" class="modern-slider duration-15">
+            <input type="number" id="duration-input-iso2" min="5" max="60" value="15" step="5" class="modern-input" readonly>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <h3>Options d'affichage</h3>
+          <select id="zone-mode" class="modern-select">
+            <option value="iso1">Afficher Isochrone 1 (Bleu)</option>
+            <option value="iso2">Afficher Isochrone 2 (Rose)</option>
+            <option value="intersection">Afficher Intersection</option>
+            <option value="union">Afficher Union</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="departure-time">Heure de départ :</label>
+          <input type="datetime-local" id="departure-time" />
+        </div>
+
+        <button id="save-btn" class="secondary-btn">
+          <i class="fas fa-save"></i> Sauvegarder cette zone
+        </button>
+        <button id="clear-map-btn" class="secondary-btn">
+          <i class="fas fa-trash-alt"></i> Effacer la carte
+        </button>
+      </div>
+
+      <div class="panel-section">
+        <h3><i class="fas fa-map-marker-alt"></i> Points d'intérêt</h3>
+        <select id="poi-select" class="modern-select">
+          <option value="restaurant">Restaurants</option>
+          <option value="hotel">Hôtels</option>
+          <option value="supermarket">Supermarchés</option>
+          <option value="pharmacy">Pharmacies</option>
+        </select>
+        <button id="load-pois-btn" class="primary-btn">Afficher les points</button>
+      </div>
+    </div>
+
+    <!-- Onglet Résultats Immobiliers -->
+    <div class="tab-content" id="housing-results">
+      <div class="panel-section">
+        <h3><i class="fas fa-home"></i> Résultats immobiliers</h3>
+        <div class="results-filter">
+          <select id="results-sort" class="modern-select">
+            <option value="distance">Trier par distance</option>
+            <option value="price">Trier par prix</option>
+          </select>
+        </div>
+        <div class="results-list" id="housing-results-list">
+          <!-- Les résultats immobiliers seront injectés ici -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Onglet Résultats Emplois -->
+    <div class="tab-content" id="jobs-results">
+      <div class="panel-section">
+        <h3><i class="fas fa-briefcase"></i> Résultats emplois</h3>
+        <h3>
+          <i class="fas fa-briefcase"></i> (<span id="results-count">0</span>)
+        </h3>
+        
+        <input type="text" id="job-search" placeholder="Rechercher un métier" class="modern-input full-width">
+        <input type="text" id="departement-search" placeholder="Code département (ex: 75)" class="modern-input full-width">
+        <button id="job-btn" class="primary-btn">
+          <span id="job-text">Rechercher les offres</span>
+          <span id="job-spinner" class="loading-spinner"></span>
+        </button>
+        <div class="results-filter">
+          <select id="jobs-sort" class="modern-select">
+            <option value="distance">Trier par distance</option>
+            <option value="salary">Trier par salaire</option>
+          </select>
+        </div>
+        <div class="results-list" id="jobs-results-list">
+          <!-- Les résultats emplois seront injectés ici -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <button id="toggle-panel" class="map-control-btn" title="Afficher/masquer le panneau de gauche">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  <div class="app-container">
+    <div id="map"></div>
+
+
+  </div>
+
+  <div class="notification" id="notification"></div>
+</body>
+</html>
