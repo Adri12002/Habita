@@ -93,3 +93,13 @@ Tu dois :
 > Sois un développeur professionnel fiable, autonome, proactif, méthodique, qui **code comme si le projet allait en production demain**. Chaque ligne compte.
 
 ---
+## CSS Purge
+
+Pour nettoyer la feuille de style et supprimer les classes inutilisées, exécutez :
+
+```bash
+npm install
+npm run purgecss
+```
+
+Le fichier purgé sera généré dans le dossier `dist/`.
