@@ -1,0 +1,10 @@
+{
+  "name": "habita",
+  "version": "1.0.0",
+  "scripts": {
+    "purgecss": "purgecss --css style.css --content index.html profil.html map.html app.js --output dist/"
+  },
+  "devDependencies": {
+    "purgecss": "^6.0.0"
+  }
+}
